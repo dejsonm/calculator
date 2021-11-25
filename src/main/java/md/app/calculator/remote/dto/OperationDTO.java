@@ -6,10 +6,10 @@ public class OperationDTO {
     private OperationDTO left;
     private OperationDTO right;
 
-    OperationDTO(String type,String value){
+    OperationDTO(String type,String value,OperationDTO left,OperationDTO right){
         this.type= type;
         this.value = value;
-        left = null;
-        right = null;
+        this.left = left;
+        this.right = right;
     }
 }
