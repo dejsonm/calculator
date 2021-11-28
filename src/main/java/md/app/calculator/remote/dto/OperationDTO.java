@@ -1,5 +1,11 @@
 package md.app.calculator.remote.dto;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class OperationDTO {
     private String type;
     private String value;
