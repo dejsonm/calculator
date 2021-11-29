@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CalculateController {
 
-    private CalculatorService calculatorService;
+    private final CalculatorService calculatorService;
 
-public CalculateController(CalculatorService calculatorService){
-    this.calculatorService = calculatorService;
-}
+    public CalculateController(CalculatorService calculatorService) {
+        this.calculatorService = calculatorService;
+    }
 
     @PostMapping("/api/calculate")
-    public String calculate(@RequestBody OperationDTO operationDTO){
+    public String calculate(@RequestBody OperationDTO operationDTO) {
 
         return calculatorService.calculate(operationDTO);
     }

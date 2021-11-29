@@ -7,27 +7,39 @@ import org.springframework.stereotype.Service;
 public class CalculatorService {
 
     String result = "";
+
     public String calculate(OperationDTO operationDTO) {
 
-try {
-    result = String.valueOf(calculateTree(operationDTO));
-} catch (ArithmeticException e){
-    return "Dzielenie przez 0";
-}
-return result;
+        try {
+            result = String.valueOf(calculateTree(operationDTO));
+        } catch (CalculateTreeException e) {
+            return e.getMessage();
+        }
+        if (result.equals("Infinity")) {
+            return "W obliczeniach występuje dzielenie przez 0";
+        }
+        return result;
 
 
     }
 
-    private Double calculateTree(OperationDTO operationDTO) throws ArithmeticException {
+    private Double calculateTree(OperationDTO operationDTO) throws ArithmeticException, CalculateTreeException {
 
-        if(operationDTO == null){
-            return null;
+        if (operationDTO == null) {
+            throw new CalculateTreeException("Nie poprawne dane wejściowe, sprawdź dane");
         }
+
+        if (operationDTO.getType() == null) {
+            throw new CalculateTreeException("Pusta wartość w type");
+        }
+
 
         switch (operationDTO.getType()) {
             case "val":
-                return Double.parseDouble(operationDTO.getValue());
+                if (operationDTO.getValue() == null) {
+                    throw new CalculateTreeException("Pusta wartosć liczby gdy type jest wartości val");
+                }
+                return Double.parseDouble(operationDTO.getValue().replace(",", "."));
             case "+":
                 return calculateTree(operationDTO.getLeft()) + calculateTree(operationDTO.getRight());
             case "-":
@@ -40,9 +52,9 @@ return result;
                 return Math.pow(calculateTree(operationDTO.getLeft()), calculateTree(operationDTO.getRight()));
             case "abs":
                 return Math.abs(calculateTree(operationDTO.getLeft()));
+            default:
+                throw new CalculateTreeException("Nie poprawna type, musi być o wartości: val,+,-,*,/,^,bas");
         }
-
-        return null;
 
     }
 
