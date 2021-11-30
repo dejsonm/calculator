@@ -14,8 +14,10 @@ public class CalculatorService {
             result = String.valueOf(calculateTree(operationDTO));
         } catch (CalculateTreeException e) {
             return e.getMessage();
+        } catch (NumberFormatException e) {
+            return "wartość value gdy type jest val nie jest liczbą";
         }
-        if (result.equals("Infinity")) {
+        if (result.equals("Infinity") || result.equals("-Infinity")) {
             return "W obliczeniach występuje dzielenie przez 0";
         }
         return result;
@@ -23,7 +25,7 @@ public class CalculatorService {
 
     }
 
-    private Double calculateTree(OperationDTO operationDTO) throws ArithmeticException, CalculateTreeException {
+    private Double calculateTree(OperationDTO operationDTO) throws ArithmeticException, CalculateTreeException, NumberFormatException {
 
         if (operationDTO == null) {
             throw new CalculateTreeException("Nie poprawne dane wejściowe, sprawdź dane");
